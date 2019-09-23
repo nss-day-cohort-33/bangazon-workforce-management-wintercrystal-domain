@@ -1,0 +1,14 @@
+{% extends 'shared/base.html' %}
+
+{% block content %}
+<h1>Employees</h1>
+
+<ol>
+{% for employee in employees %}
+    <li>
+        <p>{{ employee }}</p>
+        Current computer: {{employee.computer}}
+    </li>
+{% endfor %}
+</ol>
+{% endblock content %}
