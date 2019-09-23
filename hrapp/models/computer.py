@@ -1,4 +1,5 @@
 from django.db import models
+from .employee import Employee
 
 class Computer(models.Model):
     '''
@@ -11,10 +12,11 @@ class Computer(models.Model):
       employees: This property contains the many to many relationship with the computer/employee model
     '''
 
-    make = models.CharField(max_length=20)
-    purchase_date = models.DateField()
-    decommission_date = models.DateField(null=True, blank=True, default=None)
-    employees = models.ManyToManyField("Employee", through='EmployeeComputer')
+    make = models.CharField(max_length=25)
+    model = models.CharField(max_length=25)
+    purchase_date = models.DateField(default='0000-00-00')
+    decommission_date = models.DateField(null=True, blank=True, default="0000-00-00")
+    # employees = models.ManyToManyField("Employee", through='EmployeeComputer')
 
     class Meta:
         verbose_name = ("Computer")

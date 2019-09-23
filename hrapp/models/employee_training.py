@@ -1,6 +1,6 @@
 from django.db import models
 from .employee import Employee
-from .computer import Computer
+from .training import Training
 
 class EmployeeComputer(models.Model):
     """
@@ -10,6 +10,4 @@ class EmployeeComputer(models.Model):
     """
 
     employee_id = models.ForeignKey("Employee", on_delete=models.CASCADE)
-    computer_id = models.ForeignKey("Computer", on_delete=models.CASCADE)
-    assigned_date = models.DateField(default="0000-00-00")
-    unassigned_date = models.DateField(null=True, blank=True, default="0000-00-00")
+    training_id = models.ForeignKey("Training", on_delete=models.CASCADE)
