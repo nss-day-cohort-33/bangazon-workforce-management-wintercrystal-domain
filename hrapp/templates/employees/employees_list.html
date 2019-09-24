@@ -10,7 +10,7 @@
         <p>{{ employee.first_name }} {{ employee.last_name }}</p>
         {% for computer in computers %}
         {% if computer.employee_id_id == employee.id %}
-        Current computer: {{employee.make}}
+        Current computer: {{computer.make}}
         {% endif %}
         {% endfor %}
     </li>
