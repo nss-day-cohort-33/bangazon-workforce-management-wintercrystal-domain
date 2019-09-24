@@ -6,7 +6,7 @@
   <h1>Inventory Computer</h1>
 
 
-    <form action="{% url 'libraryapp:books' %}" method="post">
+    <form action="{% url 'hrapp:computer_list' %}" method="post">
       {% csrf_token %}
       <fieldset>
           <label for="make">Make: </label>
@@ -19,6 +19,7 @@
       <fieldset>
           <label for="employee">Employee: </label>
           <select id="employee" type="text" name="employee">
+                <option value=Null />
                 {% for employee in all_employees %}
                     <option value="{{ employee.id }}">{{ employee.first_name }} {{ employee.last_name }}</option>
                 {% endfor %}

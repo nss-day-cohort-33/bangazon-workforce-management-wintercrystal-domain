@@ -1,5 +1,5 @@
 import sqlite3
-import datetime
+from datetime import date
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
@@ -40,6 +40,8 @@ def computer_list(request):
 
         with sqlite3.connect(Connection.db_path) as conn:
             db_cursor = conn.cursor()
+            start_date = date.today().strftime("%Y/%m/%d")
+            nothing = None
 
             db_cursor.execute("""
             INSERT INTO hrapp_computer
@@ -50,6 +52,20 @@ def computer_list(request):
             VALUES (?, ?, ?, ?)
             """,
             (form_data['make'], form_data['model'],
-                datetime.datetime.now, ['NULL']))
+                start_date, nothing))
+
+            if form_data['employee'] != 'Null':
+                db_cursor.execute("""
+                INSERT INTO hrapp_computer
+                (
+                    assigned_date, unassigned_date, computer_id_id,
+                    employee_id_id
+                )
+                VALUES (?, ?, ?, ?)
+                """,
+                (start_date, nothing,
+                    , nothing))
+
+
 
         return redirect(reverse('hrapp:computer_list'))
