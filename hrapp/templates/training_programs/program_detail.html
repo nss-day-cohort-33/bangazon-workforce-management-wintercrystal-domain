@@ -1,0 +1,24 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Library</title>
+  </head>
+  <body>
+    <h1>{{ program.title }}</h1>
+
+    <div>Start Date: {{ program.start_date }}</div>
+    <div>End Date: {{ program.start_date }}</div>
+    {% comment %} <form action="{% url 'libraryapp:program' program.id %}" method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="actual_method" value="EDIT">
+        <button>Edit</button>
+    </form> {% endcomment %}
+    <form action="{% url 'libraryapp:training_pro' program.id %}" method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="actual_method" value="DELETE">
+        <button>Delete</button>
+    </form>
+  </body>
+</html>
