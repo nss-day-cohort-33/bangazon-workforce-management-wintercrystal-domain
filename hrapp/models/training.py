@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 from .department import Department
 
 class Training(models.Model):

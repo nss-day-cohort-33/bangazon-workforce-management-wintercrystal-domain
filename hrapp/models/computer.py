@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 from .employee import Employee
 
 class Computer(models.Model):

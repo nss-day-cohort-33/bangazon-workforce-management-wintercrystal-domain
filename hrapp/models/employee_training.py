@@ -2,7 +2,7 @@ from django.db import models
 from .employee import Employee
 from .training import Training
 
-class EmployeeComputer(models.Model):
+class EmployeeTraining(models.Model):
     """
     Creates the join table for the many to many relationship between computers and employees
     Author: Joe Shep
