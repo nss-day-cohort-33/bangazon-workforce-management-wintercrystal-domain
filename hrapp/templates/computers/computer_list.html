@@ -1,0 +1,18 @@
+{% extends 'shared/base.html' %}
+
+{% block content %}
+
+  <h1>Books</h1>
+
+  {% comment %} <a href="{% url 'hrapp:computer_form' %}">Add Computer to Inventory</a> {% endcomment %}
+
+    <ol>
+    {% for computer in all_computers %}
+        <li>
+             make: {{ computer.make }} model: {{ computer.model}}
+
+        </li>
+    {% endfor %}
+    </ol>
+
+{% endblock %}
