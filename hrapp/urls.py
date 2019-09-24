@@ -10,6 +10,7 @@ urlpatterns = [
     path('computers/', computer_list, name='computer_list'),
     path('logout/', logout_user, name='logout'),
     path('employees/', employee_list, name='employee_list'),
+    path('employees/form', employee_form, name='employee_form'),
     path('trainingprograms/', training_list, name='training_list'),
     # path('trainingprograms/<int:program_id>/', program_details, name='program')
     path('departments/', department_list, name='department_list'),
