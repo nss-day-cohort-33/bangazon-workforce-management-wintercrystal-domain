@@ -17,28 +17,15 @@
           <input id="model" type="text" name="model" value={{ computer.model }}>
       </fieldset>
       <fieldset>
-          <label for="year_published">Year of publication: </label>
-          <input id="year_published" type="number" name="year_published" value={{ book.year_published }}>
-      </fieldset>
-      <fieldset>
-          <label for="ISBN_number">ISBN: </label>
-          <input id="ISBN_number" type="text" name="ISBN_number" value={{ book.ISBN_number }}>
-      </fieldset>
-      <fieldset>
-          <label for="location">Library: </label>
-          <select id="location" type="text" name="location">
-                {% for library in all_libraries %}
-                    <option value="{{ library.id }}">{{ library.title }}</option>
+          <label for="employee">Employee: </label>
+          <select id="employee" type="text" name="employee">
+                {% for employee in all_employees %}
+                    <option value="{{ employee.id }}">{{ employee.first_name }} {{ employee.last_name }}</option>
                 {% endfor %}
           </select>
       </fieldset>
 
-      {% if book.id is not None %}
-            <input type="hidden" name="actual_method" value="PUT">
-            <input type="submit" value="Update" />
-      {% else %}
-            <input type="submit" value="Create" />
-      {% endif %}
+        <input type="submit" value="Create" />
     </form>
 
 {% endblock %}

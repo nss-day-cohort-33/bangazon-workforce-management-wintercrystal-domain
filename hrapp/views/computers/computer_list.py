@@ -1,4 +1,5 @@
 import sqlite3
+import datetime
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
@@ -34,22 +35,21 @@ def computer_list(request):
 
         return render(request, template, context)
 
-    # elif request.method == 'POST':
-    #     form_data = request.POST
+    elif request.method == 'POST':
+        form_data = request.POST
 
-    #     with sqlite3.connect(Connection.db_path) as conn:
-    #         db_cursor = conn.cursor()
+        with sqlite3.connect(Connection.db_path) as conn:
+            db_cursor = conn.cursor()
 
-    #         db_cursor.execute("""
-    #         INSERT INTO hrapp_computer
-    #         (
-    #             title, auther, ISBN_number,
-    #             year_published, location_id, librarian_id
-    #         )
-    #         VALUES (?, ?, ?, ?, ?, ?)
-    #         """,
-    #         (form_data['title'], form_data['auther'],
-    #             form_data['ISBN_number'], form_data['year_published'],
-    #             request.user.librarian.id, form_data["location"]))
+            db_cursor.execute("""
+            INSERT INTO hrapp_computer
+            (
+                make, model, purchase_date,
+                decommission_date
+            )
+            VALUES (?, ?, ?, ?)
+            """,
+            (form_data['make'], form_data['model'],
+                datetime.datetime.now, ['NULL']))
 
-    #     return redirect(reverse('libraryapp:books'))
+        return redirect(reverse('hrapp:computer_list'))
