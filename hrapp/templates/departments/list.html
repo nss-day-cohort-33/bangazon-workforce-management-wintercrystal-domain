@@ -1,0 +1,17 @@
+{% extends 'shared/base.html' %}
+
+{% block content %}
+<h1>Departments</h1>
+
+{% comment %} <a href="{% url 'hrapp:department_form' %}">Add Book to Inventory</a> {% endcomment %}
+
+<ol>
+{% for department in all_departments %}
+    <li>
+        <p>{{ department.dept_name }}</p>
+        <p>Current budget: ${{department.budget}}</p>
+        <p>Number of employees: {{ department.employees|length }}</p>
+    </li>
+{% endfor %}
+</ol>
+{% endblock content %}
