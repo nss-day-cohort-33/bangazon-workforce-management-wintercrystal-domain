@@ -4,6 +4,7 @@ from hrapp.models import Employee
 from hrapp.models import model_factory
 from hrapp.models import Employee
 from ..connection import Connection
+import datetime
 
 
 def employee_list(request):
@@ -33,9 +34,28 @@ def employee_list(request):
 
             dataset = db_cursor.fetchall()
 
-    template = 'employees/employees_list.html'
-    context = {
-        'employees': dataset
-    }
+        template = 'employees/employees_list.html'
+        context = {
+            'employees': dataset
+        }
 
-    return render(request, template, context)
+        return render(request, template, context)
+
+    elif request.method == 'POST':
+        form_data = request.POST
+
+        with sqlite3.connect(Connection.db_path) as conn:
+            db_cursor = conn.cursor()
+
+            db_cursor.execute("""
+            INSERT INTO hrapp_department
+            (
+                first_name, last_name, start_date, is_supervisor, department_id_id
+            )
+            VALUES (?, ?)
+            """,
+            (form_data['first_name'], form_data['last_name'], ))
+
+        return redirect(reverse('libraryapp:libraries'))
+
+

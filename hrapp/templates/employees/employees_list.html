@@ -3,6 +3,7 @@
 {% block content %}
 <h1>Employees</h1>
 
+<a href="{% url 'hrapp:employee_form' %}">Add Another Employee</a>
 <ol>
 {% for employee in employees %}
     <li>
