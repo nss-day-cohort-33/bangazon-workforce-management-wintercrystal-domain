@@ -7,7 +7,7 @@ from hrapp.models import model_factory
 from ..connection import Connection
 
 
-def get_book(book_id):
+def get_program(program_id):
     with sqlite3.connect(Connection.db_path) as conn:
         conn.row_factory = model_factory(Training)
         db_cursor = conn.cursor()
@@ -21,14 +21,32 @@ def get_book(book_id):
             t.capacity
         FROM hrapp_training t
         WHERE b.id = ?
-        """, (book_id,))
+        """, (program_id,))
+
+        return db_cursor.fetchone()
+
+def get_program(program_id):
+    with sqlite3.connect(Connection.db_path) as conn:
+        conn.row_factory = model_factory(Training)
+        db_cursor = conn.cursor()
+
+        db_cursor.execute("""
+        SELECT
+            t.id,
+            t.title,
+            t.start_date,
+            t.end_date,
+            t.capacity
+        FROM hrapp_training t
+        WHERE b.id = ?
+        """, (program_id,))
 
         return db_cursor.fetchone()
 
 @login_required
-def book_details(request, book_id):
+def program_details(request, book_id):
     if request.method == 'GET':
-        book = get_book(book_id)
+        book = get_program(program_id)
 
         template = 'books/detail.html'
         context = {

@@ -7,6 +7,7 @@ app_name = 'hrapp'
 urlpatterns = [
     path('', home, name='home'),
     path('accounts/', include('django.contrib.auth.urls'), name="login"),
+    path('computers/', computer_list, name='computer_list'),
     path('logout/', logout_user, name='logout'),
     path('employees/', employee_list, name='employee_list'),
     path('trainingprograms/', training_list, name='training_list'),
