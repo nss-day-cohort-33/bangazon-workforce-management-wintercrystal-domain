@@ -6,8 +6,8 @@
 <ol>
 {% for employee in employees %}
     <li>
-        <p>{{ employee }}</p>
-        Current computer: {{employee.computer}}
+        <p>{{ employee.first_name }} {{ employee.last_name }}</p>
+        Current computer: {{employee.make}}
     </li>
 {% endfor %}
 </ol>
