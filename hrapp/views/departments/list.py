@@ -1,8 +1,10 @@
 import sqlite3
-from ..connection import Connection
 from django.shortcuts import render
+from django.urls import reverse
+from django.shortcuts import redirect
 from hrapp.models import model_factory
 from hrapp.models import Department, Employee
+from ..connection import Connection
 
 
 
@@ -24,7 +26,8 @@ def department_list(request):
                 e.department_id_id,
                 e.is_supervisor
             from hrapp_department d
-            join hrapp_employee e on d.id = e.department_id_id;
+            join hrapp_employee e on d.id = e.department_id_id
+            order by d.id
             """)
 
             all_departments = db_cursor.fetchall()
@@ -42,6 +45,26 @@ def department_list(request):
             'all_departments' : department_groups.values()
         }
         return render(request, template_name, context )
+
+    elif request.method == 'POST':
+        form_data = request.POST
+
+
+        with sqlite3.connect(Connection.db_path) as conn:
+            db_cursor = conn.cursor()
+
+            db_cursor.execute("""
+            INSERT INTO hrapp_department
+            (
+                dept_name, budget
+            )
+            VALUES (?, ?)
+            """,
+            (form_data['name'], form_data['budget']))
+        # values as ? prevent hackers from passing SQL injection attacks in
+
+        #After it postts, send them to the booklist
+        return redirect(reverse('hrapp:department_list'))
 
 
 def create_department(cursor, row):

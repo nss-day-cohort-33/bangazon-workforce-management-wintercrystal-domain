@@ -3,7 +3,7 @@
 {% block content %}
 <h1>Departments</h1>
 
-{% comment %} <a href="{% url 'hrapp:department_form' %}">Add Book to Inventory</a> {% endcomment %}
+<a href="{% url 'hrapp:department_form' %}">Create New Department</a>
 
 <ol>
 {% for department in all_departments %}
