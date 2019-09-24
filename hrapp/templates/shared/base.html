@@ -1,12 +1,12 @@
-{% load static %}
+{% load staticfiles %}
 <!DOCTYPE html>
 <html>
 
 <head>
     <meta charset="utf-8">
-    <title>Bangazon Workforce Management</title>
+    <title>Library</title>
 
-    <link rel="stylesheet" href="{% static 'styles/base.css' %}" type="text/css" media="screen" />
+    <link rel="stylesheet" href="{% static 'styles/base.css' %}" />
 
     {% block css %}
     {% endblock %}
@@ -14,12 +14,24 @@
 
 <body>
 
-    {% block content %}
-    {% endblock %}
+    <nav id="site-nav">
+        <ol class="navList">
+            <li class="navList__route"><a href="{% url 'hrapp:home' %}">Home</a></li>
+            <li class="navList__route"><a href="{% url 'hrapp:home' %}">Employees</a></li>
+            <li class="navList__route"><a href="{% url 'hrapp:home' %}">Departments</a></li>
+            <li class="navList__route"><a href="{% url 'hrapp:home' %}">Computers</a></li>
+            <li class="navList__route"><a href="{% url 'hrapp:home' %}">Training Programs</a></li>
+            <li class="navList__route"><a href="{% url 'hrapp:home' %}">Logout</a></li>
+        </ol>
+    </nav>
+
+    <main class="main-content">
+        {% block content %}
+        {% endblock %}
+    </main>
 
     {% block scripts %}
     {% endblock scripts %}
-
 </body>
 
 </html>
