@@ -1,0 +1,44 @@
+
+{% extends 'shared/base.html' %}
+
+{% block content %}
+
+  <h1>Inventory Computer</h1>
+
+
+    <form action="{% url 'libraryapp:books' %}" method="post">
+      {% csrf_token %}
+      <fieldset>
+          <label for="make">Make: </label>
+          <input id="make" type="text" name="make" value={{ computer.make }}>
+      </fieldset>
+      <fieldset>
+          <label for="model">Model: </label>
+          <input id="model" type="text" name="model" value={{ computer.model }}>
+      </fieldset>
+      <fieldset>
+          <label for="year_published">Year of publication: </label>
+          <input id="year_published" type="number" name="year_published" value={{ book.year_published }}>
+      </fieldset>
+      <fieldset>
+          <label for="ISBN_number">ISBN: </label>
+          <input id="ISBN_number" type="text" name="ISBN_number" value={{ book.ISBN_number }}>
+      </fieldset>
+      <fieldset>
+          <label for="location">Library: </label>
+          <select id="location" type="text" name="location">
+                {% for library in all_libraries %}
+                    <option value="{{ library.id }}">{{ library.title }}</option>
+                {% endfor %}
+          </select>
+      </fieldset>
+
+      {% if book.id is not None %}
+            <input type="hidden" name="actual_method" value="PUT">
+            <input type="submit" value="Update" />
+      {% else %}
+            <input type="submit" value="Create" />
+      {% endif %}
+    </form>
+
+{% endblock %}
