@@ -1,8 +1,5 @@
 import sqlite3
 
-# Higher order function to create instances of models
-# when performing single table queries
-#Can't use model factory when there is a join in the table (book v. library)
 def model_factory(model_type):
     def create(cursor, row):
         instance = model_type()
