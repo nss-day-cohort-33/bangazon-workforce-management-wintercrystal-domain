@@ -8,7 +8,11 @@
 {% for employee in employees %}
     <li>
         <p>{{ employee.first_name }} {{ employee.last_name }}</p>
+        {% for computer in computers %}
+        {% if computer.employee_id_id == employee.id %}
         Current computer: {{employee.make}}
+        {% endif %}
+        {% endfor %}
     </li>
 {% endfor %}
 </ol>
