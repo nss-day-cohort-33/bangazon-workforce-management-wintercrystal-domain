@@ -2,7 +2,7 @@
 
 {% block content %}
   <div class="parent">
-  <h1>Books</h1>
+  <h1>Computers</h1>
   <form action="{% url 'hrapp:department_list' %}" method="post">
         <fieldset>
             {% comment %} <label for="search">search: </label> {% endcomment %}
@@ -11,7 +11,7 @@
   </form>
   </div>
 
-  {% comment %} <a href="{% url 'hrapp:computer_form' %}">Add Computer to Inventory</a> {% endcomment %}
+  <a href="{% url 'hrapp:computer_form' %}">Add Computer to Inventory</a>
 
     <ol>
     {% for computer in all_computers %}
