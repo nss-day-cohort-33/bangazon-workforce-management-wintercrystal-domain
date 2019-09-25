@@ -38,7 +38,7 @@ def get_employee(employee_id):
 
         return db_cursor.fetchone()
 
-def get_training():
+def get_training(employee_id):
     with sqlite3.connect(Connection.db_path) as conn:
         conn.row_factory = model_factory(EmployeeTraining)
         db_cursor = conn.cursor()
@@ -54,7 +54,8 @@ def get_training():
             t.capacity
         from hrapp_employeetraining et
         left join hrapp_training t on t.id = et.training_id_id
-        """)
+        where et.employee_id_id = ?
+        """, (employee_id,))
 
         return db_cursor.fetchall()
 
@@ -75,17 +76,16 @@ def get_departments():
 def employee_details(request, employee_id):
     if request.method == 'GET':
         employee = get_employee(employee_id)
-        trainings = get_training()
+        trainings = get_training(employee_id)
 
         past_trainings = list()
         plan_trainings = list()
 
         for training in trainings:
-            if training.employee_id_id == employee.id:
-                if training.start_date < date.today().strftime("%Y/%m/%d"):
-                    past_trainings.append(training)
-                else:
-                    plan_trainings.append(training)
+            if training.start_date < date.today().strftime("%Y/%m/%d"):
+                past_trainings.append(training)
+            else:
+                plan_trainings.append(training)
 
         template = 'employees/details.html'
         context = {
