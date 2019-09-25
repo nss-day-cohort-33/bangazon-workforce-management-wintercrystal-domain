@@ -84,38 +84,34 @@ def program_details(request, program_id):
             and form_data["actual_method"] == "EDIT"
         ):
             program = get_programs(program_id)
-            # newdate = program.start_date.format("%y-%M-%d")
             start_date = datetime.datetime.strptime(program.start_date, '%Y/%m/%d').strftime('%Y-%m-%d')
+            end_date = datetime.datetime.strptime(program.end_date, '%Y/%m/%d').strftime('%Y-%m-%d')
 
             template = 'training_programs/training_form.html'
             context = {
                 'Program': program,
-                'Start': start_date
+                'Start': start_date,
+                'End': end_date
             }
 
             return render(request, template, context)
 
-        # if (
-        #     "actual_method" in form_data
-        #     and form_data["actual_method"] == "UPDATE"
-        # ):
-        #     with sqlite3.connect(Connection.db_path) as conn:
-        #         db_cursor = conn.cursor()
+        if (
+            "actual_method" in form_data
+            and form_data["actual_method"] == "PUT"
+        ):
+            with sqlite3.connect(Connection.db_path) as conn:
+                db_cursor = conn.cursor()
 
-        #         db_cursor.execute("""
-        #         UPDATE libraryapp_book
-        #         SET
-        #             title = ?, author = ?, isbn = ?,
-        #             year_published = ?, librarian_id = ?
-        #         WHERE id = ?
-        #         """, (form_data['title'], form_data['author'],
-        #         form_data['isbn'], form_data['year_published'], request.user.librarian.id, book_id))
+                db_cursor.execute("""
+                UPDATE hrapp_training
+                SET
+                    title = ?,
+                    start_date = ?,
+                    end_date = ?,
+                    capacity = ?
+                WHERE id = ?
+                """,
+                (form_data['title'], datetime.datetime.strptime(form_data['start_date'], '%Y-%m-%d').strftime('%Y/%m/%d'), datetime.datetime.strptime(form_data['end_date'], '%Y-%m-%d').strftime('%Y/%m/%d'), form_data['capacity'], program_id ))
 
-        #     book = get_book(book_id)
-
-        #     template = 'books/detail.html'
-        #     context = {
-        #         'book': book
-        #     }
-
-        #     return render(request, template, context)
+            return redirect(reverse('hrapp:training_list'))
