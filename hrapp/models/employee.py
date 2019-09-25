@@ -1,5 +1,6 @@
 from django.db import models
 from .department import Department
+from django.urls import reverse
 
 class Employee(models.Model):
 

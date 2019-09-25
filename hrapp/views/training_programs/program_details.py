@@ -44,7 +44,7 @@ def get_program(program_id):
         return db_cursor.fetchone()
 
 @login_required
-def program_details(request, book_id):
+def program_details(request, program_id):
     if request.method == 'GET':
         book = get_program(program_id)
 
