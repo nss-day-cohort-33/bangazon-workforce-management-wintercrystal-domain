@@ -22,7 +22,7 @@
 
 
         {% if department.id is not None %}
-        {% comment %} The form will do a POST request, but also pass along a hidden key of actual_method with a value of PUT. That allows you to check for that value in the POST logic of your book_details() method. In that case, you will have a SQL UPDATE statement to change the values of the record in the database. {% endcomment %}
+        {% comment %} The form will do a POST request, but also pass along a hidden key of actual_method with a value of PUT. That allows you to check for that value in the POST logic of your department_details() method. In that case, you will have a SQL UPDATE statement to change the values of the record in the database. {% endcomment %}
             <input type="hidden" name="actual_method" value="PUT">
             <input type="submit" value="Update" />
         {% else %}

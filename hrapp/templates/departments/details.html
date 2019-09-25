@@ -1,0 +1,28 @@
+  {% extends 'shared/base.html' %}
+  {% block content %}
+  {% load humanize %}
+    <section>
+
+        <h1>{{ department.dept_name }}</h1>
+        <h3>Budget: ${{department.budget|intcomma}}</h3>
+        {% for employee in dept_employees %}
+        {% if employee.is_supervisor %}
+            <h3>Supervisor: {{ employee.first_name }} {{employee.last_name}}</h3>
+
+        {% endif %}
+        {% endfor %}
+            <h3>Employee List</h3>
+        {% for employee in dept_employees %}
+        {% if employee.is_supervisor is 0 %}
+            <p>- {{employee.first_name}} {{employee.last_name}}</p>
+        {% endif %}
+
+
+
+        {% endfor %}
+
+    </section>
+
+
+
+  {% endblock %}
