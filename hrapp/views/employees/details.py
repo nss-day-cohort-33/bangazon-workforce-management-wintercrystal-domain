@@ -2,6 +2,7 @@ import sqlite3
 from django.urls import reverse
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from datetime import date
 from hrapp.models import Employee
 from hrapp.models import Training
 from hrapp.models import EmployeeTraining
@@ -76,16 +77,21 @@ def employee_details(request, employee_id):
         employee = get_employee(employee_id)
         trainings = get_training()
 
-        training_list = list()
+        past_trainings = list()
+        plan_trainings = list()
 
         for training in trainings:
             if training.employee_id_id == employee.id:
-                training_list.append(training)
+                if training.start_date < date.today().strftime("%Y/%m/%d"):
+                    past_trainings.append(training)
+                else:
+                    plan_trainings.append(training)
 
         template = 'employees/details.html'
         context = {
             'employee': employee,
-            'trainings': training_list
+            'past_trainings': past_trainings,
+            'plan_trainings': plan_trainings
         }
 
         return render(request, template, context)

@@ -9,10 +9,19 @@
 {% else %}
 <div>Does not have an assigned computer.</div>
 {% endif %}
-{% if trainings|length > 0 %}
+{% if past_trainings|length > 0 %}
 <div><div>Training programs attended: </div>
 <ul>
-{% for training in trainings %}
+{% for training in past_trainings %}
+<li>{{ training.title }} ({{ training.start_date }} - {{ training.end_date }})</li>
+{% endfor %}
+</ul>
+</div>
+{% endif %}
+{% if plan_trainings|length > 0 %}
+<div><div>Training Programs Planning To Attend: </div>
+<ul>
+{% for training in plan_trainings %}
 <li>{{ training.title }} ({{ training.start_date }} - {{ training.end_date }})</li>
 {% endfor %}
 </ul>
