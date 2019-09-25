@@ -2,6 +2,7 @@ import sqlite3
 from django.urls import reverse
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+import datetime
 from hrapp.models import Training, Employee
 from hrapp.models import model_factory
 from ..connection import Connection
@@ -83,10 +84,13 @@ def program_details(request, program_id):
             and form_data["actual_method"] == "EDIT"
         ):
             program = get_programs(program_id)
+            # newdate = program.start_date.format("%y-%M-%d")
+            start_date = datetime.datetime.strptime(program.start_date, '%Y/%m/%d').strftime('%Y-%m-%d')
 
             template = 'training_programs/training_form.html'
             context = {
-                'Programs': program
+                'Program': program,
+                'Start': start_date
             }
 
             return render(request, template, context)

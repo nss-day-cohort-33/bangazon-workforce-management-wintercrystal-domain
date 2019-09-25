@@ -6,6 +6,7 @@ from hrapp.models import Training
 from hrapp.models import model_factory
 from ..connection import Connection
 from django.contrib.auth.decorators import login_required
+import datetime
 
 @login_required
 def training_list(request):
@@ -44,6 +45,6 @@ def training_list(request):
             )
             VALUES (?, ?, ?, ?)
             """,
-            (form_data['title'], form_data['start_date'].format("%Y/%m/%d"), form_data['end_date'].format("%Y/%m/%d"), form_data['capacity'] ))
+            (form_data['title'], datetime.datetime.strptime(form_data['start_date'], '%Y-%m-%d').strftime('%Y/%m/%d'), datetime.datetime.strptime(form_data['end_date'], '%Y-%m-%d').strftime('%Y/%m/%d'), form_data['capacity'] ))
 
         return redirect(reverse('hrapp:training_list'))
