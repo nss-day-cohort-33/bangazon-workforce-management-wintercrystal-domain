@@ -1,0 +1,42 @@
+
+{% extends 'shared/base.html' %}
+
+{% block content %}
+
+    <h1>New Training Program</h1>
+
+    {% if Program.id is not None %}
+        <form action="{% url 'hrapp:program' Program.id %}" method="post">
+    {% else %}
+        <form action="{% url 'hrapp:training_list' %}" method="post">
+    {% endif %}
+        {% csrf_token %}
+        <fieldset>
+            <label for="title">Title: </label>
+            <input id="title" type="text" name="title" value="{{ Program.title }}">
+        </fieldset>
+        <fieldset>
+            <label for="start_date">Start Date: </label>
+            <input type="date" id="start_date" name="start_date" value="{{ Start }}">
+        </fieldset>
+        <fieldset>
+            <label for="end_date">End Date: </label>
+            <input type="date" id="end_date" name="end_date" value="{{ End }}">
+        </fieldset>
+        <fieldset>
+            <label for="capacity">Capacity: </label>
+            <input type="number" id="capacity" name="capacity" value="{{ Program.capacity }}">
+        </fieldset>
+
+
+
+        {% if Program.id is not None %}
+        {% comment %} The form will do a POST request, but also pass along a hidden key of actual_method with a value of PUT. That allows you to check for that value in the POST logic of your book_details() method. In that case, you will have a SQL UPDATE statement to change the values of the record in the database. {% endcomment %}
+            <input type="hidden" name="actual_method" value="PUT">
+            <input type="submit" value="Update" />
+        {% else %}
+            <input type="submit" value="Create" />
+        {% endif %}
+
+    </form>
+{% endblock %}

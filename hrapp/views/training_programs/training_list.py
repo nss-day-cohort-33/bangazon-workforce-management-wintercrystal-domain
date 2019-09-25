@@ -6,8 +6,9 @@ from hrapp.models import Training
 from hrapp.models import model_factory
 from ..connection import Connection
 from django.contrib.auth.decorators import login_required
+import datetime
 
-# @login_required
+@login_required
 def training_list(request):
     if request.method == 'GET':
         with sqlite3.connect(Connection.db_path) as conn:
@@ -31,3 +32,19 @@ def training_list(request):
 
         return render(request, template, context)
 
+    elif request.method == 'POST':
+        form_data = request.POST
+
+        with sqlite3.connect(Connection.db_path) as conn:
+            db_cursor = conn.cursor()
+
+            db_cursor.execute("""
+            INSERT INTO hrapp_training
+            (
+                title, start_date, end_date, capacity
+            )
+            VALUES (?, ?, ?, ?)
+            """,
+            (form_data['title'], datetime.datetime.strptime(form_data['start_date'], '%Y-%m-%d').strftime('%Y/%m/%d'), datetime.datetime.strptime(form_data['end_date'], '%Y-%m-%d').strftime('%Y/%m/%d'), form_data['capacity'] ))
+
+        return redirect(reverse('hrapp:training_list'))

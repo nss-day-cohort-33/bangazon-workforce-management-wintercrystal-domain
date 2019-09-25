@@ -6,16 +6,25 @@
     <title>Library</title>
   </head>
   <body>
-    <h1>{{ program.title }}</h1>
+    <h1>{{ Program.title }}</h1>
 
-    <div>Start Date: {{ program.start_date }}</div>
-    <div>End Date: {{ program.start_date }}</div>
-    {% comment %} <form action="{% url 'libraryapp:program' program.id %}" method="POST">
+    <div>Start Date: {{ Program.start_date }}</div>
+    <div>End Date: {{ Program.end_date }}</div>
+    <div>Capacity: {{ Program.capacity }}</div>
+    <div>Attending Employees:</div>
+    <ol>
+    {% for employee in Employees %}
+        <li>
+            {{ employee.first_name }} {{ employee.last_name }}
+        </li>
+    {% endfor %}
+    </ol>
+    <form action="{% url 'hrapp:program' Program.id %}" method="POST">
         {% csrf_token %}
         <input type="hidden" name="actual_method" value="EDIT">
         <button>Edit</button>
-    </form> {% endcomment %}
-    <form action="{% url 'libraryapp:training_pro' program.id %}" method="POST">
+    </form>
+    <form action="{% url 'hrapp:program' Program.id %}" method="POST">
         {% csrf_token %}
         <input type="hidden" name="actual_method" value="DELETE">
         <button>Delete</button>
