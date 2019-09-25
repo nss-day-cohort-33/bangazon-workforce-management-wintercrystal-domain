@@ -29,6 +29,11 @@
 {% endif %}
 <form action="{% url 'hrapp:employee_details' employee.id %}" method="POST">
   {% csrf_token %}
+  <input type="hidden" name="actual_method" value="assignTraining">
+  <button>Assign A Training</button>
+</form>
+<form action="{% url 'hrapp:employee_details' employee.id %}" method="POST">
+  {% csrf_token %}
   <input type="hidden" name="actual_method" value="DELETE">
   <button>Delete</button>
 </form>

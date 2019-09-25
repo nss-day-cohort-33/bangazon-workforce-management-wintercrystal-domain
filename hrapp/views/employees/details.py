@@ -136,3 +136,45 @@ def employee_details(request, employee_id):
 
             return render(request, template, context)
 
+        if (
+            "actual_method" in form_data
+            and form_data["actual_method"] == "assignTraining"
+        ):
+            with sqlite3.connect(Connection.db_path) as conn:
+                conn.row_factory = model_factory(Training)
+                db_cursor = conn.cursor()
+                db_cursor.execute("""
+                SELECT
+                    COUNT(training_id_id) as booked,
+                    t.id as training_id,
+                    t.title,
+                    t.start_date,
+                    t.end_date,
+                    t.capacity
+                from hrapp_employeetraining et
+                join hrapp_training t on t.id = et.training_id_id
+                group by training_id_id
+                """)
+
+                assigned = list()
+                allowed_training = list()
+                all_trainings = get_training(employee_id)
+
+
+                trainings = db_cursor.fetchall()
+
+                for training in all_trainings:
+                    assigned.append(training.training_id_id)
+
+                for training in trainings:
+                    if training.training_id not in assigned:
+                        allowed_training.append(training)
+
+                template = "employees/training.html"
+                context = {
+                    'employee_id': employee_id,
+                    'booked_training': allowed_training
+                }
+
+            return render(request, template, context)
+

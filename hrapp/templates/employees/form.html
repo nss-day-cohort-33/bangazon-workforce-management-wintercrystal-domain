@@ -1,6 +1,6 @@
 {% extends 'shared/base.html' %}
 {% block content %}
-<h1>Inventory Book</h1>
+<h1>Create Employee</h1>
 
 <form action="{% url 'hrapp:employee_list' %}" method="post">
   {% csrf_token %}
@@ -16,18 +16,18 @@
       <input id="last_name" type="text" name="last_name" value="{{ employee.last_name }}">
   </fieldset>
   <fieldset>
-      <label for="supervisor">Supervisor: </label>
-      <select id="supervisor" type="text" name="supervisor">
-              <option value = "0"{% if employee.is_supervisor == 0 %}selected{% endif %}>No</option>
-              <option value = "1" {% if employee.is_supervisor == 1 %}selected{% endif %}>Yes</option>
-      </select>
-  </fieldset>
-  <fieldset>
       <label for="department">Department: </label>
       <select id="department" type="text" name="department">
             {% for department in departments %}
                 <option value="{{ department.id }}" {% if department.id == employee.department_id_id %}selected{% endif %}>{{ department.dept_name }}</option>
             {% endfor %}
+      </select>
+  </fieldset>
+  <fieldset>
+      <label for="supervisor">Supervisor: </label>
+      <select id="supervisor" type="text" name="supervisor">
+              <option value = "0"{% if employee.is_supervisor == 0 %}selected{% endif %}>No</option>
+              <option value = "1" {% if employee.is_supervisor == 1 %}selected{% endif %}>Yes</option>
       </select>
   </fieldset>
 

@@ -65,7 +65,6 @@ def employee_list(request):
                     "actual_method" in form_data
                     and form_data["actual_method"] == "Add It"
                 ):
-                form_data = request.POST
 
                 with sqlite3.connect(Connection.db_path) as conn:
                     db_cursor = conn.cursor()
@@ -83,4 +82,23 @@ def employee_list(request):
 
                 return redirect(reverse('hrapp:employee_details', args = [form_data["employee_id"]]))
 
+        if (
+                    "actual_method" in form_data
+                    and form_data["actual_method"] == "Assign Training"
+                ):
 
+                with sqlite3.connect(Connection.db_path) as conn:
+                    db_cursor = conn.cursor()
+
+                    start_date = date.today().strftime("%Y/%m/%d")
+
+                    db_cursor.execute("""
+                    INSERT INTO hrapp_employeetraining
+                    (
+                        employee_id_id, training_id_id
+                    )
+                    VALUES (?, ?)
+                    """,
+                    (form_data['employeeId'], form_data['training'] ))
+
+                return redirect(reverse('hrapp:employee_details', args = [form_data["employeeId"]]))
