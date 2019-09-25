@@ -7,8 +7,8 @@ from hrapp.models import Computer
 
 def computer_search(request):
 
-    if request.method == 'get':
-        form_data = request.GET
+    if request.method == 'POST':
+        form_data = request.post
         with sqlite3.connect(Connection.db_path) as conn:
             conn.row_factory = model_factory(Computer)
 
