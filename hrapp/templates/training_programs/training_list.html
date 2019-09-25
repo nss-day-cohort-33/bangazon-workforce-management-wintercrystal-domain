@@ -6,8 +6,7 @@
 <ol>
 {% for program in all_training_programs %}
     <li>
-    <a href="{% url 'hrapp:program' program.id %}">
-        <p>{{ program.title }}</p>
+        <p><a href="{% url 'hrapp:program' program.id %}">{{ program.title }}</p>
     </li>
 {% endfor %}
 </ol>
