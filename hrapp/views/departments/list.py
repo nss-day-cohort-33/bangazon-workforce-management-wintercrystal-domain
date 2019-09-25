@@ -26,7 +26,7 @@ def department_list(request):
                 e.department_id_id,
                 e.is_supervisor
             from hrapp_department d
-            join hrapp_employee e on d.id = e.department_id_id
+            left join hrapp_employee e on d.id = e.department_id_id
             order by d.id
             """)
 
@@ -36,10 +36,12 @@ def department_list(request):
             for department, employee in all_departments:
                 if department.id not in department_groups:
                     department_groups[department.id] = department
-                    department_groups[department.id].employees.append(employee)
+                    if employee.first_name is not None:
+                        department_groups[department.id].employees.append(employee)
 
                 else:
-                    department_groups[department.id].employees.append(employee)
+                    if employee.first_name is not None:
+                        department_groups[department.id].employees.append(employee)
         template_name = 'departments/list.html'
         context = {
             'all_departments' : department_groups.values()
