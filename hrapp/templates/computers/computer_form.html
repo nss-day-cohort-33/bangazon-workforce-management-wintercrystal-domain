@@ -1,0 +1,32 @@
+
+{% extends 'shared/base.html' %}
+
+{% block content %}
+
+  <h1>Inventory Computer</h1>
+
+
+    <form action="{% url 'hrapp:computer_list' %}" method="post">
+      {% csrf_token %}
+      <fieldset>
+          <label for="make">Make: </label>
+          <input id="make" type="text" name="make" value={{ computer.make }}>
+      </fieldset>
+      <fieldset>
+          <label for="model">Model: </label>
+          <input id="model" type="text" name="model" value={{ computer.model }}>
+      </fieldset>
+      <fieldset>
+          <label for="employee">Employee: </label>
+          <select id="employee" type="text" name="employee">
+                <option value=Null />
+                {% for employee in all_employees %}
+                    <option value="{{ employee.id }}">{{ employee.first_name }} {{ employee.last_name }}</option>
+                {% endfor %}
+          </select>
+      </fieldset>
+
+        <input type="submit" value="Create" />
+    </form>
+
+{% endblock %}
