@@ -80,3 +80,4 @@ def computer_list(request):
 
 
         return redirect(reverse('hrapp:computer_list'))
+
