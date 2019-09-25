@@ -1,0 +1,20 @@
+{% extends 'shared/base.html' %}
+{% block content %}
+<h1>{{ employee.first_name }} {{ employee.last_name }}</h1>
+
+
+<div>Department: {{ employee.dept_name }}</div>
+{% if employee.make is not None %}
+<div>Current Computer: {{ employee.make }} {{ employee.model }}</div>
+{% endif %}
+<form action="{% url 'hrapp:employee_details' employee.id %}" method="POST">
+  {% csrf_token %}
+  <input type="hidden" name="actual_method" value="DELETE">
+  <button>Delete</button>
+</form>
+<form action="{% url 'hrapp:employee_details' employee.id %}" method="POST">
+  {% csrf_token %}
+  <input type="hidden" name="actual_method" value="EDIT">
+  <button>Edit</button>
+</form>
+{% endblock %}

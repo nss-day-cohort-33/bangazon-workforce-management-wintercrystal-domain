@@ -4,16 +4,16 @@
 
 <form action="{% url 'hrapp:employee_list' %}" method="post">
   {% csrf_token %}
-  {% comment %} {% if book.id is not None %}
-  <input type="hidden" name="book_id" value="{{ book.id }}" />
-  {% endif %} {% endcomment %}
+  {% if employee.id is not None %}
+  <input type="hidden" name="employee_id" value="{{ employee.id }}" />
+  {% endif %}
   <fieldset>
       <label for="first_name">First Name: </label>
-      <input id="first_name" type="text" name="first_name" {% comment %} value="{{ book.title }}" {% endcomment %}>
+      <input id="first_name" type="text" name="first_name" value="{{ employee.first_name }}">
   </fieldset>
   <fieldset>
       <label for="last_name">Last Name: </label>
-      <input id="last_name" type="text" name="last_name">
+      <input id="last_name" type="text" name="last_name" value="{{ employee.last_name }}">
   </fieldset>
   <fieldset>
       <label for="supervisor">Supervisor: </label>
@@ -31,10 +31,10 @@
       </select>
   </fieldset>
 
-  {% comment %} {% if book.id is not None %}
+  {% if employee.id is not None %}
   <input type="submit" name="actual_method" value="Add It" />
-  {% else %} {% endcomment %}
+  {% else %}
   <input type="submit" value="Add It" />
-  {% comment %} {% endif %} {% endcomment %}
+  {% endif %}
 </form>
 {% endblock %}
