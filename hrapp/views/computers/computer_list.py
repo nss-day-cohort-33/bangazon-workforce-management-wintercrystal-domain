@@ -37,6 +37,7 @@ def computer_list(request):
 
     elif request.method == 'POST':
         form_data = request.POST
+        last_id = None
 
         with sqlite3.connect(Connection.db_path) as conn:
             db_cursor = conn.cursor()
@@ -54,9 +55,20 @@ def computer_list(request):
             (form_data['make'], form_data['model'],
                 start_date, nothing))
 
-            if form_data['employee'] != 'Null':
+            db_cursor.execute("""
+            select last_insert_rowid()
+            """)
+
+            last_id = db_cursor.fetchone()
+
+        if form_data['employee'] != 'Null':
+            with sqlite3.connect(Connection.db_path) as conn:
+                db_cursor = conn.cursor()
+                start_date = date.today().strftime("%Y/%m/%d")
+                nothing = None
+
                 db_cursor.execute("""
-                INSERT INTO hrapp_computer
+                INSERT INTO hrapp_employeecomputer
                 (
                     assigned_date, unassigned_date, computer_id_id,
                     employee_id_id
@@ -64,8 +76,7 @@ def computer_list(request):
                 VALUES (?, ?, ?, ?)
                 """,
                 (start_date, nothing,
-                    , nothing))
-
+                    last_id[0], form_data['employee']))
 
 
         return redirect(reverse('hrapp:computer_list'))
