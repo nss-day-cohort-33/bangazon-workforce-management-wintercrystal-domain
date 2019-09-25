@@ -1,16 +1,22 @@
 {% extends 'shared/base.html' %}
 
 {% block content %}
+{% load humanize %}
 <h1>Departments</h1>
 
+{% comment %} This generates the create department link only if the user is a logged in user {% endcomment %}
+{% if user.is_authenticated %}
 <a href="{% url 'hrapp:department_form' %}">Create New Department</a>
+{% endif %}
 
 <ol>
 {% for department in all_departments %}
     <li>
-        <p>{{ department.dept_name }}</p>
-        <p>Current budget: ${{department.budget}}</p>
+        <a href="{% url 'hrapp:department_details' department.id %}"> {{ department.dept_name }}</a>
+
+        <p>Current budget: ${{department.budget|intcomma}}</p>
         <p>Number of employees: {{ department.employees|length }}</p>
+
     </li>
 {% endfor %}
 </ol>
