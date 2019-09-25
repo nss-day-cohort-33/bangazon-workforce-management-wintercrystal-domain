@@ -6,6 +6,17 @@
 <div>Department: {{ employee.dept_name }}</div>
 {% if employee.make is not None %}
 <div>Current Computer: {{ employee.make }} {{ employee.model }}</div>
+{% else %}
+<div>Does not have an assigned computer.</div>
+{% endif %}
+{% if trainings|length > 0 %}
+<div><div>Training programs attended: </div>
+<ul>
+{% for training in trainings %}
+<li>{{ training.title }} ({{ training.start_date }} - {{ training.end_date }})</li>
+{% endfor %}
+</ul>
+</div>
 {% endif %}
 <form action="{% url 'hrapp:employee_details' employee.id %}" method="POST">
   {% csrf_token %}

@@ -3,14 +3,15 @@ from django.urls import reverse
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from hrapp.models import Employee
+from hrapp.models import Training
+from hrapp.models import EmployeeTraining
 from hrapp.models import Department
 from hrapp.models import model_factory
 from ..connection import Connection
 
-
 def get_employee(employee_id):
     with sqlite3.connect(Connection.db_path) as conn:
-        conn.row_factory = model_factory(Employee)
+        conn.row_factory =model_factory(Employee)
         db_cursor = conn.cursor()
 
         db_cursor.execute("""
@@ -36,6 +37,26 @@ def get_employee(employee_id):
 
         return db_cursor.fetchone()
 
+def get_training():
+    with sqlite3.connect(Connection.db_path) as conn:
+        conn.row_factory = model_factory(EmployeeTraining)
+        db_cursor = conn.cursor()
+
+        db_cursor.execute("""
+        select
+            et.id,
+            et.employee_id_id,
+            et.training_id_id,
+            t.title,
+            t.start_date,
+            t.end_date,
+            t.capacity
+        from hrapp_employeetraining et
+        left join hrapp_training t on t.id = et.training_id_id
+        """)
+
+        return db_cursor.fetchall()
+
 def get_departments():
     with sqlite3.connect(Connection.db_path) as conn:
         conn.row_factory = model_factory(Department)
@@ -53,10 +74,18 @@ def get_departments():
 def employee_details(request, employee_id):
     if request.method == 'GET':
         employee = get_employee(employee_id)
+        trainings = get_training()
+
+        training_list = list()
+
+        for training in trainings:
+            if training.employee_id_id == employee.id:
+                training_list.append(training)
 
         template = 'employees/details.html'
         context = {
-            'employee': employee
+            'employee': employee,
+            'trainings': training_list
         }
 
         return render(request, template, context)
