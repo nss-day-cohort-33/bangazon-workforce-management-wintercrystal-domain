@@ -2,15 +2,20 @@
 
 {% block content %}
 
-  <section id="book-details">
-        <h1>{{ book.title }}</h1>
-        <h2>By {{ book.author }}</h2>
+  <section id="computer-details">
+        <h1>{{ computer.make }} {{ computer.model }}</h1>
 
-        <div>Published in {{ book.year_published }}</div>
-        <div>ISBN: {{ book.isbn }}</div>
+        <div>date purchased {{ computer.purchas_date }}</div>
+        {% if computer.decommission_date %}
+            <div>decommissoned date: {{ computer.decommission_date }}</div>
+        {% endif %}
+        {% for employee in employees %}
+        {% if employee.computer_id_id == computer.id %}
+        <div> current assigned employee: {{ employee.first_name }} {{ employee.last_name }}
+
     </section>
 
-    <section id="book-actions" style="display:flex;">
+    {% comment %} <section id="book-actions" style="display:flex;">
         <form action="{% url 'libraryapp:book' book.id %}" method="POST">
             {% csrf_token %}
             <input type="hidden" name="actual_method" value="DELETE">
@@ -21,6 +26,6 @@
             {% csrf_token %}
             <button>Edit</button>
         </form>
-    </section>
+    </section> {% endcomment %}
 
 {% endblock %}
