@@ -20,5 +20,7 @@ urlpatterns = [
     path('departments/', department_list, name='department_list'),
     path('department/form', department_form, name='department_form'),
     path('department/<int:department_id>/', department_details, name='department_details'),
+    path('employees', computer_search, name='computer_search'),
+
 
 ]
