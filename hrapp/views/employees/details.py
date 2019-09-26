@@ -2,7 +2,7 @@ import sqlite3
 from django.urls import reverse
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from datetime import date
+from datetime import datetime
 from hrapp.models import Employee
 from hrapp.models import Training
 from hrapp.models import EmployeeTraining
@@ -47,6 +47,7 @@ def get_training(employee_id):
         select
             et.id,
             et.employee_id_id,
+            COUNT(training_id_id) as booked,
             et.training_id_id,
             t.title,
             t.start_date,
@@ -55,7 +56,25 @@ def get_training(employee_id):
         from hrapp_employeetraining et
         left join hrapp_training t on t.id = et.training_id_id
         where et.employee_id_id = ?
+        group by training_id_id
         """, (employee_id,))
+
+        return db_cursor.fetchall()
+
+def get_trainings():
+    with sqlite3.connect(Connection.db_path) as conn:
+        conn.row_factory = model_factory(Training)
+        db_cursor = conn.cursor()
+
+        db_cursor.execute("""
+        select
+            t.id,
+            t.title,
+            t.start_date,
+            t.end_date,
+            t.capacity
+        from hrapp_training t
+        """)
 
         return db_cursor.fetchall()
 
@@ -82,7 +101,7 @@ def employee_details(request, employee_id):
         plan_trainings = list()
 
         for training in trainings:
-            if training.start_date < date.today().strftime("%Y/%m/%d"):
+            if datetime.today() > datetime.strptime(training.start_date, '%Y/%m/%d'):
                 past_trainings.append(training)
             else:
                 plan_trainings.append(training)
@@ -141,34 +160,23 @@ def employee_details(request, employee_id):
             and form_data["actual_method"] == "assignTraining"
         ):
             with sqlite3.connect(Connection.db_path) as conn:
-                conn.row_factory = model_factory(Training)
-                db_cursor = conn.cursor()
-                db_cursor.execute("""
-                SELECT
-                    COUNT(training_id_id) as booked,
-                    t.id as training_id,
-                    t.title,
-                    t.start_date,
-                    t.end_date,
-                    t.capacity
-                from hrapp_employeetraining et
-                join hrapp_training t on t.id = et.training_id_id
-                group by training_id_id
-                """)
 
                 assigned = list()
                 allowed_training = list()
-                all_trainings = get_training(employee_id)
+
+                all_trainings = get_trainings()
+                trainings = get_training(employee_id)
 
 
-                trainings = db_cursor.fetchall()
-
-                for training in all_trainings:
-                    assigned.append(training.training_id_id)
 
                 for training in trainings:
-                    if training.training_id not in assigned:
+                    assigned.append(training.training_id_id)
+
+                for training in all_trainings:
+                    if training.id not in assigned:
                         allowed_training.append(training)
+
+
 
                 template = "employees/training.html"
                 context = {

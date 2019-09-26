@@ -9,7 +9,7 @@
       <label for="training">Training: </label>
       <select id="training" type="text" name="training">
         {% for training in booked_training %}
-        <option value = "{{ training.training_id }}">{{ training.title }} ({{ training.start_date }} - {{ training.end_date }})</option>
+        <option value = "{{ training.id }}">{{ training.title }} ({{ training.start_date }} - {{ training.end_date }})</option>
         {% endfor %}
       </select>
   </fieldset>
