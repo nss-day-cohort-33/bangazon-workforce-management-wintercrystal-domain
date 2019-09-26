@@ -8,7 +8,7 @@ from hrapp.models import Computer
 def computer_search(request):
 
     if request.method == 'POST':
-        form_data = request.post
+        form_data = request.POST
         with sqlite3.connect(Connection.db_path) as conn:
             conn.row_factory = model_factory(Computer)
 
@@ -35,6 +35,6 @@ def computer_search(request):
             context = {
                 'all_computers': computer_results
             }
-
+            return render(request, template, context)
 
 

@@ -4,6 +4,7 @@
   <div class="parent">
   <h1>Computers</h1>
   <form action="{% url 'hrapp:computer_search' %}" method="post">
+  {% csrf_token %}
 
 
         <fieldset>
