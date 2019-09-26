@@ -101,10 +101,11 @@ def employee_details(request, employee_id):
         plan_trainings = list()
 
         for training in trainings:
-            if datetime.today() > datetime.strptime(training.start_date, '%Y/%m/%d'):
-                past_trainings.append(training)
-            else:
-                plan_trainings.append(training)
+            if training.start_date is not None:
+                if datetime.today() > datetime.strptime(training.start_date, '%Y/%m/%d'):
+                    past_trainings.append(training)
+                else:
+                    plan_trainings.append(training)
 
         template = 'employees/details.html'
         context = {
@@ -173,7 +174,7 @@ def employee_details(request, employee_id):
                     assigned.append(training.training_id_id)
 
                 for training in all_trainings:
-                    if training.id not in assigned:
+                    if training.id not in assigned and datetime.today() < datetime.strptime(training.start_date, '%Y/%m/%d'):
                         allowed_training.append(training)
 
 
