@@ -1,0 +1,33 @@
+{% extends 'shared/base.html' %}
+
+{% block content %}
+
+  <section id="computer-details">
+        <h1>{{ computer.make }} {{ computer.model }}</h1>
+
+        <div>date purchased {{ computer.purchase_date }}</div>
+        {% if computer.decommission_date %}
+            <div>decommissoned date: {{ computer.decommission_date }}</div>
+        {% endif %}
+        {% for employee in employees %}
+        {% if employee.computer_id_id == computer.id %}
+        <div> current assigned employee: {{ employee.first_name }} {{ employee.last_name }}
+        {% endif %}
+        {% endfor %}
+
+    </section>
+
+    {% comment %} <section id="book-actions" style="display:flex;">
+        <form action="{% url 'libraryapp:book' book.id %}" method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="actual_method" value="DELETE">
+            <button>Delete</button>
+        </form>
+
+        <form action="{% url 'libraryapp:book_edit_form' book.id %}" method="GET">
+            {% csrf_token %}
+            <button>Edit</button>
+        </form>
+    </section> {% endcomment %}
+
+{% endblock %}

@@ -2,12 +2,13 @@ import sqlite3
 from django.urls import reverse
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+import datetime
 from hrapp.models import Training, Employee
 from hrapp.models import model_factory
 from ..connection import Connection
 
 
-def get_program(program_id):
+def get_programs(program_id):
     with sqlite3.connect(Connection.db_path) as conn:
         conn.row_factory = model_factory(Training)
         db_cursor = conn.cursor()
@@ -20,37 +21,39 @@ def get_program(program_id):
             t.end_date,
             t.capacity
         FROM hrapp_training t
-        WHERE b.id = ?
+        WHERE t.id = ?
         """, (program_id,))
 
         return db_cursor.fetchone()
 
-def get_program(program_id):
+def get_employees(program_id):
     with sqlite3.connect(Connection.db_path) as conn:
-        conn.row_factory = model_factory(Training)
+        conn.row_factory = model_factory(Employee)
         db_cursor = conn.cursor()
 
         db_cursor.execute("""
         SELECT
-            t.id,
-            t.title,
-            t.start_date,
-            t.end_date,
-            t.capacity
-        FROM hrapp_training t
-        WHERE b.id = ?
+            e.id,
+            e.first_name,
+            e.last_name
+        FROM hrapp_employee e
+        JOIN hrapp_employeetraining et
+        ON et.employee_id_id = e.id
+        WHERE et.training_id_id = ?
         """, (program_id,))
 
-        return db_cursor.fetchone()
+        return db_cursor.fetchall()
 
 @login_required
 def program_details(request, program_id):
     if request.method == 'GET':
-        book = get_program(program_id)
+        program = get_programs(program_id)
+        employees = get_employees(program_id)
 
-        template = 'books/detail.html'
+        template = 'training_programs/program_detail.html'
         context = {
-            'book': book
+            'Program': program,
+            'Employees': employees
         }
 
         return render(request, template, context)
@@ -70,46 +73,45 @@ def program_details(request, program_id):
                 db_cursor = conn.cursor()
 
                 db_cursor.execute("""
-                DELETE FROM libraryapp_book
+                DELETE FROM hrapp_training
                 WHERE id = ?
-                """, (book_id,))
+                """, (program_id,))
 
-            return redirect(reverse('libraryapp:books'))
+            return redirect(reverse('hrapp:training_list'))
 
         if (
             "actual_method" in form_data
             and form_data["actual_method"] == "EDIT"
         ):
-            book = get_book(book_id)
+            program = get_programs(program_id)
+            start_date = datetime.datetime.strptime(program.start_date, '%Y/%m/%d').strftime('%Y-%m-%d')
+            end_date = datetime.datetime.strptime(program.end_date, '%Y/%m/%d').strftime('%Y-%m-%d')
 
-            template = 'books/edit.html'
+            template = 'training_programs/training_form.html'
             context = {
-                'book': book
+                'Program': program,
+                'Start': start_date,
+                'End': end_date
             }
 
             return render(request, template, context)
 
         if (
             "actual_method" in form_data
-            and form_data["actual_method"] == "UPDATE"
+            and form_data["actual_method"] == "PUT"
         ):
             with sqlite3.connect(Connection.db_path) as conn:
                 db_cursor = conn.cursor()
 
                 db_cursor.execute("""
-                UPDATE libraryapp_book
+                UPDATE hrapp_training
                 SET
-                    title = ?, author = ?, isbn = ?,
-                    year_published = ?, librarian_id = ?
+                    title = ?,
+                    start_date = ?,
+                    end_date = ?,
+                    capacity = ?
                 WHERE id = ?
-                """, (form_data['title'], form_data['author'],
-                form_data['isbn'], form_data['year_published'], request.user.librarian.id, book_id))
+                """,
+                (form_data['title'], datetime.datetime.strptime(form_data['start_date'], '%Y-%m-%d').strftime('%Y/%m/%d'), datetime.datetime.strptime(form_data['end_date'], '%Y-%m-%d').strftime('%Y/%m/%d'), form_data['capacity'], program_id ))
 
-            book = get_book(book_id)
-
-            template = 'books/detail.html'
-            context = {
-                'book': book
-            }
-
-            return render(request, template, context)
+            return redirect(reverse('hrapp:training_list'))
