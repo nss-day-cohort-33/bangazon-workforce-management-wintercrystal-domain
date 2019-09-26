@@ -114,4 +114,13 @@ def program_details(request, program_id):
                 """,
                 (form_data['title'], datetime.datetime.strptime(form_data['start_date'], '%Y-%m-%d').strftime('%Y/%m/%d'), datetime.datetime.strptime(form_data['end_date'], '%Y-%m-%d').strftime('%Y/%m/%d'), form_data['capacity'], program_id ))
 
-            return redirect(reverse('hrapp:training_list'))
+                program = get_programs(program_id)
+                employees = get_employees(program_id)
+
+                template = 'training_programs/program_detail.html'
+                context = {
+                    'Program': program,
+                    'Employees': employees
+                }
+
+                return render(request, template, context)
