@@ -6,6 +6,7 @@ from .training_programs.program_details import program_details
 from .training_programs.past_programs import past_programs
 from .computers.computer_list import computer_list
 from .computers.computer_form import computer_form
+from .computers.computer_details import computer_details
 from .home import home
 from .auth.logout import logout_user
 from .connection import Connection
