@@ -114,4 +114,4 @@ def program_details(request, program_id):
                 """,
                 (form_data['title'], datetime.datetime.strptime(form_data['start_date'], '%Y-%m-%d').strftime('%Y/%m/%d'), datetime.datetime.strptime(form_data['end_date'], '%Y-%m-%d').strftime('%Y/%m/%d'), form_data['capacity'], program_id ))
 
-            return redirect(reverse('hrapp:training_list'))
+            return redirect(reverse('hrapp:program', args = [form_data["program_id"]]))

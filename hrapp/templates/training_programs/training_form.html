@@ -11,6 +11,7 @@
         <form action="{% url 'hrapp:training_list' %}" method="post">
     {% endif %}
         {% csrf_token %}
+        <input type="hidden" name="program_id" value="{{ Program.id }}" />
         <fieldset>
             <label for="title">Title: </label>
             <input id="title" type="text" name="title" value="{{ Program.title }}">
