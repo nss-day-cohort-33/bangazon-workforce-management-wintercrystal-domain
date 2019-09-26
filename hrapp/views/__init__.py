@@ -3,6 +3,7 @@ from .employees.employee_form import employee_form
 from .training_programs.training_list import training_list
 from .training_programs.training_form import training_form
 from .training_programs.program_details import program_details
+from .training_programs.past_programs import past_programs
 from .computers.computer_list import computer_list
 from .computers.computer_form import computer_form
 from .computers.computer_details import computer_details
