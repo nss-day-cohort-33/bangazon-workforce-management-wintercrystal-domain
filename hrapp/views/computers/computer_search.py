@@ -28,7 +28,7 @@ def computer_search(request):
             computer_results = []
 
             for computer in all_computers:
-                if form_data["search"] in computer.make or form_data["search"] in computer.model:
+                if form_data["search"].lower() in computer.make.lower() or form_data["search"].lower() in computer.model.lower():
                     computer_results.append(computer)
 
             template = 'computers/computer_list.html'
