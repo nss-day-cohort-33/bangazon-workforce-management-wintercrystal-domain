@@ -12,22 +12,29 @@ import datetime
 def training_list(request):
     if request.method == 'GET':
         with sqlite3.connect(Connection.db_path) as conn:
-
+            today = datetime.datetime.today()
             conn.row_factory = model_factory(Training)
 
             db_cursor = conn.cursor()
             db_cursor.execute("""
-            select
+            SELECT
                 t.id,
-                t.title
-            from hrapp_training t
+                t.title,
+                t.start_date
+            FROM hrapp_training t
             """)
 
             all_training_programs = db_cursor.fetchall()
 
+            upcoming = list()
+
+            for program in all_training_programs:
+                if today < datetime.datetime.strptime(program.start_date, '%Y/%m/%d'):
+                    upcoming.append(program)
+
         template = 'training_programs/training_list.html'
         context = {
-            'all_training_programs': all_training_programs
+            'all_training_programs': upcoming
         }
 
         return render(request, template, context)
