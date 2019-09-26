@@ -4,12 +4,13 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from hrapp.models import Computer, Employee
 from hrapp.models import model_factory
+from datetime import date
 from ..connection import Connection
 
 
 def get_computer(computer_id):
     with sqlite3.connect(Connection.db_path) as conn:
-        conn.row_factory = model_factory(Employee)
+        conn.row_factory = model_factory(Computer)
         db_cursor = conn.cursor()
 
         db_cursor.execute("""
@@ -30,6 +31,7 @@ def get_computer(computer_id):
 def computer_details(request, computer_id):
     if request.method == 'GET':
         computer = get_computer(computer_id)
+        data_set = None
         with sqlite3.connect(Connection.db_path) as conn:
             conn.row_factory = model_factory(Computer)
             db_cursor = conn.cursor()
@@ -44,8 +46,8 @@ def computer_details(request, computer_id):
                 e.last_name
             from hrapp_employeecomputer t
             left join hrapp_employee e on e.id = t.employee_id_id
-            where t.unassigned_date is NULL
-            """)
+            where t.unassigned_date is NULL and computer_id_id is ?
+            """,(computer_id,))
 
             data_set = db_cursor.fetchall()
             context = {
@@ -55,48 +57,50 @@ def computer_details(request, computer_id):
         template_name = 'computers/computer_details.html'
         return render(request, template_name, context)
 
-    # elif request.method == 'POST':
-    #     form_data = request.POST
+    elif request.method == 'POST':
+        form_data = request.POST
 
-    #     # Check if this POST is for editing a book
-    #     if (
-    #         "actual_method" in form_data
-    #         and form_data["actual_method"] == "PUT"
-    #     ):
-    #         with sqlite3.connect(Connection.db_path) as conn:
-    #             db_cursor = conn.cursor()
+        if (
+            "actual_method" in form_data
+            and form_data["actual_method"] == "PUT"
+        ):
+            with sqlite3.connect(Connection.db_path) as conn:
+                db_cursor = conn.cursor()
+                decommission_date = date.today().strftime("%Y/%m/%d")
 
-    #             db_cursor.execute("""
-    #             UPDATE libraryapp_book
-    #             SET title = ?,
-    #                 auther = ?,
-    #                 ISBN_number = ?,
-    #                 year_published = ?,
-    #                 location_id = ?
-    #             WHERE id = ?
-    #             """,
-    #             (
-    #                 form_data['title'],
-    #                 form_data['auther'],
-    #                 form_data['ISBN_number'],
-    #                 form_data['year_published'],
-    #                 form_data['location'],
-    #                 book_id,
-    #             ))
+                db_cursor.execute("""
+                UPDATE hrapp_computer
+                SET decommission_date = ?
+                WHERE id = ?
+                """,
+                (
+                    decommission_date, computer_id
+                ))
 
-    #         return redirect(reverse('libraryapp:books'))
+            with sqlite3.connect(Connection.db_path) as conn:
+                db_cursor = conn.cursor()
+                unassigned_date = date.today().strftime("%Y/%m/%d")
 
-    #     # Check if this POST is for deleting a book
-    #     if (
-    #         "actual_method" in form_data
-    #         and form_data["actual_method"] == "DELETE"
-    #     ):
-    #         with sqlite3.connect(Connection.db_path) as conn:
-    #             db_cursor = conn.cursor()
+                db_cursor.execute("""
+                UPDATE hrapp_employeecomputer
+                SET unassigned_date = ?
+                WHERE computer_id_id = ? and unassigned_date is NULL
+                """,
+                (
+                    unassigned_date, computer_id
+                ))
+            return redirect(reverse('hrapp:computer_list'))
 
-    #             db_cursor.execute("""
-    #                 DELETE FROM libraryapp_book
-    #                 WHERE id = ?
-    #             """, (book_id,))
+        if (
+            "actual_method" in form_data
+            and form_data["actual_method"] == "DELETE"
+        ):
+            with sqlite3.connect(Connection.db_path) as conn:
+                db_cursor = conn.cursor()
 
-    #         return redirect(reverse('libraryapp:books'))
+                db_cursor.execute("""
+                    DELETE FROM hrapp_computer
+                    WHERE id = ?
+                """, (computer_id,))
+
+            return redirect(reverse('hrapp:computer_list'))
