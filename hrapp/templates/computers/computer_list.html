@@ -1,8 +1,20 @@
 {% extends 'shared/base.html' %}
 
 {% block content %}
-
+  <div class="parent">
   <h1>Computers</h1>
+  <form action="{% url 'hrapp:computer_search' %}" method="post">
+  {% csrf_token %}
+
+
+        <fieldset>
+            {% comment %} <label for="search">search: </label> {% endcomment %}
+            <input id="search" type="text" name="search" placeholder="Computer Make or Model">
+            <a href="{% url 'hrapp:computer_list' %}">Clear Search Flter</a>
+
+        </fieldset>
+  </form>
+  </div>
 
   <a href="{% url 'hrapp:computer_form' %}">Add Computer to Inventory</a>
 
