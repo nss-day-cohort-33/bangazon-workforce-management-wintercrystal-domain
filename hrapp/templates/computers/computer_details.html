@@ -17,14 +17,14 @@
 
     </section>
 
-    {% comment %} <section id="book-actions" style="display:flex;">
-        <form action="{% url 'libraryapp:book' book.id %}" method="POST">
+    <section id="computer-actions" style="display:flex;">
+        <form action="{% url 'hrapp:computer' computer.id %}" method="POST">
             {% csrf_token %}
             <input type="hidden" name="actual_method" value="DELETE">
             <button>Delete</button>
         </form>
 
-        <form action="{% url 'libraryapp:book_edit_form' book.id %}" method="GET">
+        {% comment %} <form action="{% url 'libraryapp:book_edit_form' book.id %}" method="GET">
             {% csrf_token %}
             <button>Edit</button>
         </form>

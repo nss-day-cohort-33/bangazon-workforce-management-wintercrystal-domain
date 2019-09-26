@@ -55,8 +55,8 @@ def computer_details(request, computer_id):
         template_name = 'computers/computer_details.html'
         return render(request, template_name, context)
 
-    # elif request.method == 'POST':
-    #     form_data = request.POST
+    elif request.method == 'POST':
+        form_data = request.POST
 
     #     # Check if this POST is for editing a book
     #     if (
@@ -87,16 +87,16 @@ def computer_details(request, computer_id):
     #         return redirect(reverse('libraryapp:books'))
 
     #     # Check if this POST is for deleting a book
-    #     if (
-    #         "actual_method" in form_data
-    #         and form_data["actual_method"] == "DELETE"
-    #     ):
-    #         with sqlite3.connect(Connection.db_path) as conn:
-    #             db_cursor = conn.cursor()
+        if (
+            "actual_method" in form_data
+            and form_data["actual_method"] == "DELETE"
+        ):
+            with sqlite3.connect(Connection.db_path) as conn:
+                db_cursor = conn.cursor()
 
-    #             db_cursor.execute("""
-    #                 DELETE FROM libraryapp_book
-    #                 WHERE id = ?
-    #             """, (book_id,))
+                db_cursor.execute("""
+                    DELETE FROM libraryapp_book
+                    WHERE id = ?
+                """, (book_id,))
 
-    #         return redirect(reverse('libraryapp:books'))
+            return redirect(reverse('libraryapp:books'))
