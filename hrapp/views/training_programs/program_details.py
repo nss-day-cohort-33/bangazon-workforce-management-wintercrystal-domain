@@ -44,7 +44,7 @@ def get_employees(program_id):
 
         return db_cursor.fetchall()
 
-@login_required
+
 def program_details(request, program_id):
     if request.method == 'GET':
         program = get_programs(program_id)

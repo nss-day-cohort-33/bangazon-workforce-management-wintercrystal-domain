@@ -27,6 +27,7 @@
 </ul>
 </div>
 {% endif %}
+{% if user.is_authenticated %}
 <form action="{% url 'hrapp:employee_details' employee.id %}" method="POST">
   {% csrf_token %}
   <input type="hidden" name="actual_method" value="assignTraining">
@@ -42,4 +43,5 @@
   <input type="hidden" name="actual_method" value="EDIT">
   <button>Edit</button>
 </form>
+{% endif %}
 {% endblock %}
