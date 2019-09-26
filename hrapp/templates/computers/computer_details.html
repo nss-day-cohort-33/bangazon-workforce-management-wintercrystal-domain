@@ -10,9 +10,9 @@
             <div>decommissoned date: {{ computer.decommission_date }}</div>
         {% endif %}
         {% for employee in employees %}
-        {% if employee.computer_id_id == computer.id %}
-        <div> current assigned employee: {{ employee.first_name }} {{ employee.last_name }}
-        {% endif %}
+            {% if employee.computer_id_id == computer.id %}
+            <div> current assigned employee: {{ employee.first_name }} {{ employee.last_name }} </div>
+            {% endif %}
         {% endfor %}
 
     </section>
@@ -20,8 +20,18 @@
     <section id="computer-actions" style="display:flex;">
         <form action="{% url 'hrapp:computer' computer.id %}" method="POST">
             {% csrf_token %}
-            <input type="hidden" name="actual_method" value="DELETE">
-            <button>Delete</button>
+            {% for employee in employees %}
+                {% if employee.computer_id_id == computer.id %}
+                    <input type="hidden" name="actual_method" value="PUT">
+                    <input type="submit" value="Update" />
+                    <button>decommisson</button>
+                {% elif employee.computer_id_id != computer.id %}
+                    <input type="hidden" name="actual_method" value="DELETE">
+                    <button>Delete</button>
+                {% endif %}
+            {% endfor %}
+
+
         </form>
 
         {% comment %} <form action="{% url 'libraryapp:book_edit_form' book.id %}" method="GET">
