@@ -174,7 +174,7 @@ def employee_details(request, employee_id):
                     assigned.append(training.training_id_id)
 
                 for training in all_trainings:
-                    if training.id not in assigned:
+                    if training.id not in assigned and datetime.today() < datetime.strptime(training.start_date, '%Y/%m/%d'):
                         allowed_training.append(training)
 
 

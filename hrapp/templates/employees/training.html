@@ -2,15 +2,23 @@
 {% block content %}
 <h1>Assign A Training</h1>
 
+{% if booked_training|length > 0 %}
 <form action="{% url 'hrapp:employee_list' %}" method="post">
+  {% else %}
+<form action="{% url 'hrapp:employee_details' employee_id %}" method="get">
+  {% endif %}
   {% csrf_token %}
   <input type="hidden" name="employeeId" value="{{ employee_id }}" />
   <fieldset>
       <label for="training">Training: </label>
       <select id="training" type="text" name="training">
+        {% if booked_training|length > 0 %}
         {% for training in booked_training %}
         <option value = "{{ training.id }}">{{ training.title }} ({{ training.start_date }} - {{ training.end_date }})</option>
         {% endfor %}
+        {% else %}
+        <option>No Available Trainings</option>
+        {% endif %}
       </select>
   </fieldset>
 
