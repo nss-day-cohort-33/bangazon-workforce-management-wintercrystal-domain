@@ -9,7 +9,7 @@ from ..connection import Connection
 
 def get_computer(computer_id):
     with sqlite3.connect(Connection.db_path) as conn:
-        conn.row_factory = model_factory(Employee)
+        conn.row_factory = model_factory(Computer)
         db_cursor = conn.cursor()
 
         db_cursor.execute("""
@@ -44,8 +44,8 @@ def computer_details(request, computer_id):
                 e.last_name
             from hrapp_employeecomputer t
             left join hrapp_employee e on e.id = t.employee_id_id
-            where t.unassigned_date is NULL
-            """)
+            where t.unassigned_date is NULL and computer_id_id is ?
+            """,(computer_id,))
 
             data_set = db_cursor.fetchall()
             context = {
@@ -58,7 +58,6 @@ def computer_details(request, computer_id):
     elif request.method == 'POST':
         form_data = request.POST
 
-    #     # Check if this POST is for editing a book
     #     if (
     #         "actual_method" in form_data
     #         and form_data["actual_method"] == "PUT"
@@ -95,8 +94,8 @@ def computer_details(request, computer_id):
                 db_cursor = conn.cursor()
 
                 db_cursor.execute("""
-                    DELETE FROM libraryapp_book
+                    DELETE FROM hrapp_computer
                     WHERE id = ?
-                """, (book_id,))
+                """, (computer_id,))
 
-            return redirect(reverse('libraryapp:books'))
+            return redirect(reverse('hrapp:computer_list'))
