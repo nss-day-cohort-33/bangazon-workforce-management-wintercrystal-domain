@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from hrapp.models import Computer, Employee
 from hrapp.models import model_factory
+from datetime import date
 from ..connection import Connection
 
 
@@ -58,34 +59,37 @@ def computer_details(request, computer_id):
     elif request.method == 'POST':
         form_data = request.POST
 
-    #     if (
-    #         "actual_method" in form_data
-    #         and form_data["actual_method"] == "PUT"
-    #     ):
-    #         with sqlite3.connect(Connection.db_path) as conn:
-    #             db_cursor = conn.cursor()
+        if (
+            "actual_method" in form_data
+            and form_data["actual_method"] == "PUT"
+        ):
+            with sqlite3.connect(Connection.db_path) as conn:
+                db_cursor = conn.cursor()
+                date = date.today().strftime("%Y/%m/%d")
 
-    #             db_cursor.execute("""
-    #             UPDATE libraryapp_book
-    #             SET title = ?,
-    #                 auther = ?,
-    #                 ISBN_number = ?,
-    #                 year_published = ?,
-    #                 location_id = ?
-    #             WHERE id = ?
-    #             """,
-    #             (
-    #                 form_data['title'],
-    #                 form_data['auther'],
-    #                 form_data['ISBN_number'],
-    #                 form_data['year_published'],
-    #                 form_data['location'],
-    #                 book_id,
-    #             ))
+                db_cursor.execute("""
+                UPDATE hrapp_computer
+                SET decommission_date = ?
+                WHERE id = ?
+                """,
+                (
+                    date, computer_id
+                ))
 
-    #         return redirect(reverse('libraryapp:books'))
+            with sqlite3.connect(Connection.db_path) as conn:
+                db_cursor = conn.cursor()
+                date = date.today().strftime("%Y/%m/%d")
 
-    #     # Check if this POST is for deleting a book
+                db_cursor.execute("""
+                UPDATE hrapp_employeecomputer
+                SET unassigned_date = ?
+                WHERE id = ?
+                """,
+                (
+                    date, computer_id
+                ))
+            return redirect(reverse('libraryapp:books'))
+
         if (
             "actual_method" in form_data
             and form_data["actual_method"] == "DELETE"
