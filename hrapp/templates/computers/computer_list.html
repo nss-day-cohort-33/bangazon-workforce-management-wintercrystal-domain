@@ -10,13 +10,14 @@
         <fieldset>
             {% comment %} <label for="search">search: </label> {% endcomment %}
             <input id="search" type="text" name="search" placeholder="Computer Make or Model">
-            <a href="{% url 'hrapp:computer_list' %}">Clear Search Flter</a>
+            <a href="{% url 'hrapp:computer_list' %}">Clear Search Filter</a>
 
         </fieldset>
   </form>
   </div>
-
+    {% if user.is_authenticated %}
   <a href="{% url 'hrapp:computer_form' %}">Add Computer to Inventory</a>
+  {% endif %}
 
     <ol>
     {% for computer in all_computers %}

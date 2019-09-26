@@ -91,7 +91,7 @@ def get_departments():
         """)
         return db_cursor.fetchall()
 
-@login_required
+
 def employee_details(request, employee_id):
     if request.method == 'GET':
         employee = get_employee(employee_id)

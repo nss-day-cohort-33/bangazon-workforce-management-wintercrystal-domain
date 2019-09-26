@@ -8,7 +8,7 @@ from ..connection import Connection
 from django.contrib.auth.decorators import login_required
 import datetime
 
-@login_required
+
 def training_list(request):
     if request.method == 'GET':
         with sqlite3.connect(Connection.db_path) as conn:
