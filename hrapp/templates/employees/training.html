@@ -22,6 +22,10 @@
       </select>
   </fieldset>
 
+  {% if booked_training|length > 0 %}
   <input type="submit" name="actual_method" value="Assign Training" />
+  {% else %}
+  <input type="submit" name="actual_method" value="Back to Employee" />
+  {% endif %}
 </form>
 {% endblock %}
