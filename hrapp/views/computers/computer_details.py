@@ -31,6 +31,7 @@ def get_computer(computer_id):
 def computer_details(request, computer_id):
     if request.method == 'GET':
         computer = get_computer(computer_id)
+        data_set = None
         with sqlite3.connect(Connection.db_path) as conn:
             conn.row_factory = model_factory(Computer)
             db_cursor = conn.cursor()
@@ -65,7 +66,7 @@ def computer_details(request, computer_id):
         ):
             with sqlite3.connect(Connection.db_path) as conn:
                 db_cursor = conn.cursor()
-                date = date.today().strftime("%Y/%m/%d")
+                decommission_date = date.today().strftime("%Y/%m/%d")
 
                 db_cursor.execute("""
                 UPDATE hrapp_computer
@@ -73,22 +74,22 @@ def computer_details(request, computer_id):
                 WHERE id = ?
                 """,
                 (
-                    date, computer_id
+                    decommission_date, computer_id
                 ))
 
             with sqlite3.connect(Connection.db_path) as conn:
                 db_cursor = conn.cursor()
-                date = date.today().strftime("%Y/%m/%d")
+                unassigned_date = date.today().strftime("%Y/%m/%d")
 
                 db_cursor.execute("""
                 UPDATE hrapp_employeecomputer
                 SET unassigned_date = ?
-                WHERE id = ?
+                WHERE computer_id_id = ? and unassigned_date is NULL
                 """,
                 (
-                    date, computer_id
+                    unassigned_date, computer_id
                 ))
-            return redirect(reverse('libraryapp:books'))
+            return redirect(reverse('hrapp:computer_list'))
 
         if (
             "actual_method" in form_data

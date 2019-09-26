@@ -22,12 +22,14 @@
             {% csrf_token %}
                 {% if employees %}
                     <input type="hidden" name="actual_method" value="PUT">
-                    <input type="submit" value="Decommisson" />
+                    <button>Decommission</button>
+                {% elif computer.decommission_date %}
+
                 {% else %}
                     <input type="hidden" name="actual_method" value="DELETE">
                     <button>Delete</button>
                 {% endif %}
-            
+
 
 
         </form>
