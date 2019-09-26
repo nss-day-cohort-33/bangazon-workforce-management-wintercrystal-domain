@@ -1,0 +1,45 @@
+{% extends 'shared/base.html' %}
+{% block content %}
+<h1>{{ employee.first_name }} {{ employee.last_name }}</h1>
+
+
+<div>Department: {{ employee.dept_name }}</div>
+{% if employee.make is not None %}
+<div>Current Computer: {{ employee.make }} {{ employee.model }}</div>
+{% else %}
+<div>Does not have an assigned computer.</div>
+{% endif %}
+{% if past_trainings|length > 0 %}
+<div><div>Training programs attended: </div>
+<ul>
+{% for training in past_trainings %}
+<li>{{ training.title }} ({{ training.start_date }} - {{ training.end_date }})</li>
+{% endfor %}
+</ul>
+</div>
+{% endif %}
+{% if plan_trainings|length > 0 %}
+<div><div>Training Programs Planning To Attend: </div>
+<ul>
+{% for training in plan_trainings %}
+<li>{{ training.title }} ({{ training.start_date }} - {{ training.end_date }})</li>
+{% endfor %}
+</ul>
+</div>
+{% endif %}
+<form action="{% url 'hrapp:employee_details' employee.id %}" method="POST">
+  {% csrf_token %}
+  <input type="hidden" name="actual_method" value="assignTraining">
+  <button>Assign A Training</button>
+</form>
+<form action="{% url 'hrapp:employee_details' employee.id %}" method="POST">
+  {% csrf_token %}
+  <input type="hidden" name="actual_method" value="DELETE">
+  <button>Delete</button>
+</form>
+<form action="{% url 'hrapp:employee_details' employee.id %}" method="POST">
+  {% csrf_token %}
+  <input type="hidden" name="actual_method" value="EDIT">
+  <button>Edit</button>
+</form>
+{% endblock %}

@@ -13,6 +13,7 @@ urlpatterns = [
     path('logout/', logout_user, name='logout'),
     path('employees/', employee_list, name='employee_list'),
     path('employees/form', employee_form, name='employee_form'),
+    path('employees/<int:employee_id>/', employee_details, name='employee_details'),
     path('trainingprograms/', training_list, name='training_list'),
     path('trainingprograms/form', training_form, name="training_form"),
     path('trainingprograms/<int:program_id>/', program_details, name='program'),

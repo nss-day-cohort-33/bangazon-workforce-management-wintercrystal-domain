@@ -7,12 +7,7 @@
 <ol>
 {% for employee in employees %}
     <li>
-        <p>{{ employee.first_name }} {{ employee.last_name }}</p>
-        {% for computer in computers %}
-        {% if computer.employee_id_id == employee.id %}
-        Current computer: {{computer.make}}
-        {% endif %}
-        {% endfor %}
+        <p><a href="{% url 'hrapp:employee_details' employee.id %}">{{ employee.first_name }} {{ employee.last_name }}</a> ({{ employee.dept_name }})</p>
     </li>
 {% endfor %}
 </ol>
