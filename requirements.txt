@@ -23,7 +23,7 @@ django-crispy-forms==1.7.2
 django-dotenv==1.4.2
 django-filter==1.1.0
 django-weasyprint==0.5.4
-djangorestframework==3.8.2
+djangorestframework==3.11.2
 flake8==3.5.0
 get==0.0.21
 html5lib==1.0.1
