@@ -60,7 +60,7 @@ pycparser==2.19
 pyflakes==1.6.0
 Pygments==2.2.0
 pylint==2.3.1
-PyPDF2==1.26.0
+PyPDF2==1.27.5
 Pyphen==0.9.5
 pytablereader==0.23.1
 pytz==2017.3
